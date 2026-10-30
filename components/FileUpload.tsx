@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 
 import config from "@/lib/config";
-import { IKImage, IKUpload, IKVideo, ImageKitProvider } from "imagekitio-next";
+import { Image as IKImage, Video as IKVideo, ImageKitProvider, upload } from "@imagekit/next";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -30,8 +30,8 @@ const authenticator = async () => {
         const { signature, expire, token } = data
 
         return { signature, expire, token }
-    } catch (error: any) {
-        throw new Error(`Authentication request failed: ${error.message}`)
+    } catch (error) {
+        throw new Error(`Authentication request failed: ${error instanceof Error ? error.message : String(error)}`)
     }
 }
 
@@ -46,7 +46,7 @@ interface Props {
 }
 
 const FileUpload = ({ onFileChange, type, accept, placeholder, folder, variant, value }: Props) => {
-    const ikUploadRef = useRef(null)
+    const ikUploadRef = useRef<HTMLInputElement>(null)
     const [file, setFile] = useState<{ filePath: string | null }>({ filePath: value ?? null })
     const [progress, setProgress] = useState(0)
 
@@ -56,7 +56,7 @@ const FileUpload = ({ onFileChange, type, accept, placeholder, folder, variant, 
         text: variant === 'dark' ? 'text-light-100' : 'text-dark-400'
     }
 
-    const onError = (error: any) => {
+    const onError = (error: unknown) => {
         console.log(error)
 
         toast.error(`${type} upload failed`, {
@@ -64,7 +64,7 @@ const FileUpload = ({ onFileChange, type, accept, placeholder, folder, variant, 
         })
     }
 
-    const onSuccess = (res: any) => {
+    const onSuccess = (res: { filePath: string }) => {
         setFile(res)
         onFileChange(res.filePath)
 
@@ -97,25 +97,40 @@ const FileUpload = ({ onFileChange, type, accept, placeholder, folder, variant, 
 
     return (
         <ImageKitProvider
-            publicKey={publicKey}
             urlEndpoint={urlEndpoint}
-            authenticator={authenticator}
         >
-            <IKUpload
+            <input
+                type="file"
                 ref={ikUploadRef}
-                onError={onError}
-                onSuccess={onSuccess}
-                useUniqueFileName={true}
-                validateFile={onValidate}
-                onUploadStart={() => setProgress(0)}
-                onUploadProgress={({ loaded, total }) => {
-                    const percent = Math.round((loaded / total) * 100)
-
-                    setProgress(percent)
-                }}
-                folder={folder}
                 accept={accept}
                 className="hidden"
+                onChange={async (event) => {
+                    const input = event.currentTarget;
+                    const selectedFile = input.files?.[0];
+                    if (!selectedFile || !onValidate(selectedFile)) return;
+                    setProgress(0);
+                    try {
+                        const auth = await authenticator();
+                        const result = await upload({
+                            ...auth,
+                            publicKey,
+                            file: selectedFile,
+                            fileName: selectedFile.name,
+                            folder,
+                            useUniqueFileName: true,
+                            onProgress: ({ loaded, total }) => {
+                                if (total > 0) setProgress(Math.round((loaded / total) * 100));
+                            },
+                        });
+                        if (!result.filePath) throw new Error("Upload response is missing filePath");
+                        onSuccess({ filePath: result.filePath });
+                    } catch (error) {
+                        setProgress(0);
+                        onError(error);
+                    } finally {
+                        input.value = "";
+                    }
+                }}
             />
 
             <button
@@ -124,7 +139,6 @@ const FileUpload = ({ onFileChange, type, accept, placeholder, folder, variant, 
                     e.preventDefault()
 
                     if (ikUploadRef.current) {
-                        // @ts-ignore
                         ikUploadRef.current?.click()
                     }
                 }}
@@ -155,14 +169,14 @@ const FileUpload = ({ onFileChange, type, accept, placeholder, folder, variant, 
 
             {(file && file.filePath !== null) &&
                 (type === 'image' ? (<IKImage
-                    path={file.filePath}
+                    src={file.filePath}
                     alt={file.filePath}
                     width={500}
                     height={300}
                 />
                 ) : type === 'video' ? (
                     <IKVideo
-                        path={file.filePath}
+                        src={file.filePath}
                         controls={true}
                         className="h-96 w-full rounded-xl"
                     />

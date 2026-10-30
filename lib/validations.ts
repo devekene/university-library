@@ -3,7 +3,7 @@ import { z } from "zod";
 export const signUpSchema = z.object({
   fullName: z.string().min(3),
   email: z.string().email(),
-  universityId: z.coerce.number(),
+  universityId: z.coerce.number<string | number>(),
   universityCard: z.string().nonempty("University Card is required"),
   password: z.string().min(8),
 });
@@ -18,8 +18,8 @@ export const bookSchema = z.object({
   description: z.string().trim().min(10).max(1000),
   author: z.string().trim().min(2).max(100),
   genre: z.string().trim().min(2).max(50),
-  rating: z.coerce.number().min(1).max(5),
-  totalCopies: z.coerce.number().int().positive().lte(10000),
+  rating: z.coerce.number<string | number>().min(1).max(5),
+  totalCopies: z.coerce.number<string | number>().int().positive().lte(10000),
   coverUrl: z.string().nonempty(),
   coverColor: z
     .string()

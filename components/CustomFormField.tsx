@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ReactNode, useState } from "react";
-import { Control, ControllerRenderProps } from "react-hook-form";
+import { Control, ControllerRenderProps, FieldValues, FieldPath } from "react-hook-form";
 
 import { Textarea } from "@/components/ui/textarea";
 import { Eye, EyeOff } from "lucide-react";
@@ -25,10 +25,10 @@ export enum FormFieldType {
     COLOR = 'color'
 }
 
-interface CustomFormFieldProps {
-    control: Control<any>;
+interface CustomFormFieldProps<TInput extends FieldValues, TOutput> {
+    control: Control<TInput, unknown, TOutput>;
     fieldType: FormFieldType;
-    name: string;
+    name: FieldPath<TInput>;
     label: string;
     placeholder?: string;
     className?: string;
@@ -44,12 +44,12 @@ interface CustomFormFieldProps {
     children?: ReactNode;
 }
 
-const RenderField = ({
+const RenderField = <TInput extends FieldValues, TOutput>({
     field,
     props
 }: {
-    field: ControllerRenderProps<any, string>;
-    props: CustomFormFieldProps
+    field: ControllerRenderProps<TInput, FieldPath<TInput>>;
+    props: CustomFormFieldProps<TInput, TOutput>
 }) => {
     const {
         fieldType,
@@ -153,7 +153,7 @@ const RenderField = ({
     }
 };
 
-const CustomFormField = (props: CustomFormFieldProps) => {
+const CustomFormField = <TInput extends FieldValues, TOutput>(props: CustomFormFieldProps<TInput, TOutput>) => {
     const { control, name, label } = props;
 
     return (

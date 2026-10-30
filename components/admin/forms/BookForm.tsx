@@ -24,7 +24,7 @@ const BookForm = ({ type, ...book }: Props) => {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
 
-    const form = useForm<z.infer<typeof bookSchema>>({
+    const form = useForm<z.input<typeof bookSchema>, unknown, z.output<typeof bookSchema>>({
         resolver: zodResolver(bookSchema),
         defaultValues: {
             title: "",

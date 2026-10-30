@@ -1,4 +1,4 @@
-import ImageKit from "imagekit";
+import ImageKit from "@imagekit/nodejs";
 import dummyBooks from "@/dummyBooks.json";
 import { books } from "./schema";
 import { config } from "dotenv";
@@ -11,18 +11,17 @@ const sql = neon(process.env.DATABASE_URL!);
 export const db = drizzle({ client: sql });
 
 const imagekit = new ImageKit({
-  publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!,
-  urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT!,
   privateKey: process.env.IMAGEKIT_PRIVATE_KEY!,
 });
 
 async function uploadToImageKit(url: string, fileName: string, folder: string) {
   try {
-    const response = await imagekit.upload({
+    const response = await imagekit.files.upload({
       file: url,
       fileName: fileName,
       folder,
     });
+    if (!response.filePath) throw new Error("ImageKit upload response is missing filePath");
     return response.filePath;
   } catch (error) {
     console.error(`Error uploading ${fileName} to ImageKit:`, error);

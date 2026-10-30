@@ -2,7 +2,7 @@
 
 import config from '@/lib/config'
 import { cn } from '@/lib/utils'
-import { IKImage } from 'imagekitio-next'
+import { Image as IKImage, buildSrc } from '@imagekit/next'
 import BookCoverSvg from './BookCoverSvg'
 
 type BookCoverVariant = 'extraSmall' | 'small' | 'medium' | 'regular' | 'wide'
@@ -34,13 +34,13 @@ const BookCover = ({
 
             <div className="absolute z-10" style={{ left: '12%', width: '87.5%', height: '88%' }}>
                 <IKImage
-                    path={coverImage}
+                    src={coverImage}
                     urlEndpoint={config.env.imageKit.urlEndpoint}
                     alt='Book cover'
                     fill
                     className='rounded-sm object-fill'
                     loading='lazy'
-                    lqip={{ active: true }}
+                    style={{ backgroundImage: `url("${buildSrc({ urlEndpoint: config.env.imageKit.urlEndpoint, src: coverImage, transformation: [{ width: 20, quality: 10, blur: 90 }] })}")`, backgroundSize: "cover" }}
                 />
             </div>
         </div>

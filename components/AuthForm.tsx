@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DefaultValues, FieldValues, Path, SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
+import { DefaultValues, FieldValues, Path, SubmitHandler, useForm } from "react-hook-form";
 import { type ZodType } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -21,25 +21,25 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-interface Props<T extends FieldValues> {
-    schema: ZodType<T>;
-    defaultValues: T;
-    onSubmit: (data: T) => Promise<{ success: boolean; error?: string }>
+interface Props<TInput extends FieldValues, TOutput extends FieldValues> {
+    schema: ZodType<TOutput, TInput>;
+    defaultValues: TInput;
+    onSubmit: (data: TOutput) => Promise<{ success: boolean; error?: string }>
     type: 'SIGN_IN' | 'SIGN_UP'
 }
 
-const AuthForm = <T extends FieldValues>({ type, schema, defaultValues, onSubmit }: Props<T>) => {
+const AuthForm = <TInput extends FieldValues, TOutput extends FieldValues>({ type, schema, defaultValues, onSubmit }: Props<TInput, TOutput>) => {
     const router = useRouter()
     const isSignIn = type === 'SIGN_IN'
 
     const [isLoading, setIsLoading] = useState(false)
 
-    const form: UseFormReturn<T> = useForm({
+    const form = useForm<TInput, unknown, TOutput>({
         resolver: zodResolver(schema),
-        defaultValues: defaultValues as DefaultValues<T>
+        defaultValues: defaultValues as DefaultValues<TInput>
     })
 
-    const handleSubmit: SubmitHandler<T> = async (data) => {
+    const handleSubmit: SubmitHandler<TOutput> = async (data) => {
         setIsLoading(true)
 
         const result = await onSubmit(data);
@@ -78,7 +78,7 @@ const AuthForm = <T extends FieldValues>({ type, schema, defaultValues, onSubmit
                         <FormField
                             key={field}
                             control={form.control}
-                            name={field as Path<T>}
+                            name={field as Path<TInput>}
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel className="capitalize">

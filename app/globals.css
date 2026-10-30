@@ -1,6 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.ts";
+
+/* Preserve Tailwind 3 border and button defaults. */
+@layer base {
+  *, ::before, ::after, ::backdrop { border-color: var(--color-gray-200, currentColor); }
+  button, [role="button"] { cursor: pointer; }
+}
 
 @layer base {
   :root {
@@ -29,11 +34,11 @@
 
 @layer components {
   .form-btn {
-    @apply inline-flex min-h-14 w-full items-center justify-center rounded-md bg-primary px-6 py-2 text-base font-bold text-dark-100 hover:bg-primary !important;
+    @apply inline-flex! min-h-14! w-full! items-center! justify-center! rounded-md! bg-primary! px-6! py-2! text-base! font-bold! text-dark-100! hover:bg-primary!;
   }
 
   .form-input {
-    @apply min-h-14 w-full border-none bg-dark-300 text-base font-bold text-white placeholder:font-normal placeholder:text-light-100 focus-visible:shadow-none focus-visible:ring-0 !important;
+    @apply min-h-14! w-full! border-none! bg-dark-300! text-base! font-bold! text-white! placeholder:font-normal! placeholder:text-light-100! focus-visible:shadow-none! focus-visible:ring-0!;
   }
 
   /* Book Card */
@@ -50,7 +55,7 @@
   }
 
   .book-btn {
-    @apply mt-3 min-h-14 w-full !bg-dark-600 font-bebas-neue text-base !text-primary;
+    @apply mt-3 min-h-14 w-full bg-dark-600! font-bebas-neue text-base text-primary!;
   }
 
   /* Borrowed Book */
@@ -118,7 +123,7 @@
   }
 
   .book-overview_btn {
-    @apply mt-4 min-h-14 w-fit bg-primary text-dark-100 hover:bg-primary/90 max-md:w-full !important;
+    @apply mt-4! min-h-14! w-fit! bg-primary! text-dark-100! hover:bg-primary/90! max-md:w-full!;
   }
 
   /* File Upload */
@@ -140,12 +145,12 @@
   }
 
   .search-input {
-    @apply w-full border-none font-bold text-white placeholder:font-normal placeholder:text-light-100 focus-visible:shadow-none focus-visible:ring-0 !important;
+    @apply w-full! border-none! font-bold! text-white! placeholder:font-normal! placeholder:text-light-100! focus-visible:shadow-none! focus-visible:ring-0!;
   }
 
   /* Book Receipt */
   .book-receipt_admin-btn {
-    @apply rounded-md bg-light-300 font-semibold text-primary-admin hover:bg-light-300/80 !important;
+    @apply rounded-md! bg-light-300! font-semibold! text-primary-admin! hover:bg-light-300/80!;
   }
 
   /* Book Ticket */
@@ -191,7 +196,7 @@
   }
 
   .not-found-btn {
-    @apply mt-6 min-h-12 min-w-[360px] bg-primary font-bebas-neue text-xl text-dark-100 hover:bg-primary/90 !important;
+    @apply mt-6! min-h-12! min-w-[360px]! bg-primary! font-bebas-neue! text-xl! text-dark-100! hover:bg-primary/90!;
   }
 
   /* Pagination */
@@ -200,11 +205,11 @@
   }
 
   .pagination-btn_light {
-    @apply bg-light-300 text-dark-300 hover:bg-light-300/70 !important;
+    @apply bg-light-300! text-dark-300! hover:bg-light-300/70!;
   }
 
   .pagination-btn_dark {
-    @apply bg-dark-300 hover:bg-dark-100 !important;
+    @apply bg-dark-300! hover:bg-dark-100!;
   }
 
   #pagination p {
@@ -213,30 +218,24 @@
 
   /* Sort */
   .select-trigger {
-    @apply h-10 w-40 border-dark-100 bg-dark-300 px-4 text-light-100 !important;
+    @apply h-10! w-40! border-dark-100! bg-dark-300! px-4! text-light-100!;
   }
 
   .select-content {
-    @apply border-dark-100 bg-dark-300 text-light-100 !important;
+    @apply border-dark-100! bg-dark-300! text-light-100!;
   }
 
   .select-item {
-    @apply focus:bg-dark-600 focus:text-light-100 !important;
+    @apply focus:bg-dark-600! focus:text-light-100!;
   }
 }
 
 @layer utilities {
-  .gradient-vertical {
-    background: linear-gradient(180deg, #12141d 0%, #12151f 100%);
-  }
 
-  .gradient-gray {
-    background: linear-gradient(270deg, #37363a 0%, #353637 100%);
-  }
 
-  .gradient-blue {
-    background: linear-gradient(180deg, #232839 0%, #12141d 100%);
-  }
+
+
+
 
   /* Auth */
   .auth-container {
@@ -338,3 +337,15 @@
     --chart-5: 340 75% 55%;
   }
 }
+
+@utility gradient-vertical {
+    background: linear-gradient(180deg, #12141d 0%, #12151f 100%);
+  }
+
+@utility gradient-gray {
+    background: linear-gradient(270deg, #37363a 0%, #353637 100%);
+  }
+
+@utility gradient-blue {
+    background: linear-gradient(180deg, #232839 0%, #12141d 100%);
+  }

@@ -25,7 +25,7 @@ const Sidebar = ({ session }: { session: Session }) => {
 
                         return (
                             <Link href={link.route} key={link.route}>
-                                <div className={cn("link", isSelected && "bg-primary-admin shadow-sm")}>
+                                <div className={cn("link", isSelected && "bg-primary-admin shadow-xs")}>
                                     <div className="relative size-5">
                                         <Image
                                             src={link.img}

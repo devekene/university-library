@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@reference "../app/globals.css";
 
 @layer components {
   .admin-container {
@@ -8,24 +6,24 @@
   }
 
   .back-btn {
-    @apply mb-10 w-fit border border-light-300 bg-white text-xs font-medium text-dark-200 hover:bg-light-300 !important;
+    @apply mb-10! w-fit! border! border-light-300! bg-white! text-xs! font-medium! text-dark-200! hover:bg-light-300!;
   }
 
   /* Confirmation Dialog */
   .confirm-trigger {
-    @apply w-full text-sm font-semibold shadow-none hover:bg-opacity-70 !important;
+    @apply w-full! text-sm! font-semibold! shadow-none! hover:opacity-70!;
   }
 
   .confirm-approve {
-    @apply bg-green-100 text-green-800 hover:bg-green-100/70 !important;
+    @apply bg-green-100! text-green-800! hover:bg-green-100/70!;
   }
 
   .confirm-reject {
-    @apply bg-red-100 text-red-800 hover:bg-red-100/70 !important;
+    @apply bg-red-100! text-red-800! hover:bg-red-100/70!;
   }
 
   .confirm-content {
-    @apply flex flex-col items-center justify-center p-6 sm:max-w-md !important;
+    @apply flex! flex-col! items-center! justify-center! p-6! sm:max-w-md!;
   }
 
   .confirm-illustration {
@@ -37,21 +35,21 @@
   }
 
   .confirm-btn {
-    @apply min-h-14 w-full rounded-xl text-base font-bold text-light-800 !important;
+    @apply min-h-14! w-full! rounded-xl! text-base! font-bold! text-light-800!;
   }
 
   /* Book Form */
   .book-form_input {
-    @apply min-h-14 border border-gray-100 bg-light-600 p-4 text-base font-semibold placeholder:font-normal placeholder:text-slate-500 !important;
+    @apply min-h-14! border! border-gray-100! bg-light-600! p-4! text-base! font-semibold! placeholder:font-normal! placeholder:text-slate-500!;
   }
 
   .book-form_btn {
-    @apply min-h-14 w-full bg-primary-admin hover:bg-primary-admin/95 !important;
+    @apply min-h-14! w-full! bg-primary-admin! hover:bg-primary-admin/95!;
   }
 
   /* Home Page */
   .view-btn {
-    @apply rounded-md bg-light-300 font-semibold text-primary-admin shadow-none hover:bg-light-300/80 !important;
+    @apply rounded-md! bg-light-300! font-semibold! text-primary-admin! shadow-none! hover:bg-light-300/80!;
   }
 
   .add-new-book_btn {
@@ -134,7 +132,7 @@
   }
 
   .hex-input {
-    @apply h-full flex-1 bg-transparent font-ibm-plex-sans outline-none;
+    @apply h-full flex-1 bg-transparent font-ibm-plex-sans outline-hidden;
   }
 
   .hex-color-picker {
@@ -161,7 +159,7 @@
   }
 
   .admin-search_input {
-    @apply w-full border-0 bg-transparent shadow-none outline-none focus:border-0 focus:outline-none focus:ring-0 !important;
+    @apply w-full! border-0! bg-transparent! shadow-none! outline-hidden! focus:border-0! focus:outline-hidden! focus:ring-0!;
   }
 
   /* Sidebar */
@@ -186,7 +184,7 @@
   }
 
   .admin-sidebar .user {
-    @apply my-8 flex w-full flex-row gap-2 rounded-full border border-light-400 px-6 py-2 shadow-sm max-md:px-2;
+    @apply my-8 flex w-full flex-row gap-2 rounded-full border border-light-400 px-6 py-2 shadow-xs max-md:px-2;
   }
 
   /* User Card */
